@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+
+  # proxy:
+  #   image: nginx:alpine
+  #   container_name: proxy
+  #   restart: always
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+  #   ports:
+  #     - 80:80
+  #   networks:
+  #     - server
+
+  # backend:
+  #   container_name: backend
+  #   build: ./
+  #   restart: always
+  #   environment:
+  #     NODE_ENV: production
+  #     MONGO_DB_HOST: mongodb://mongo
+  #     MONGO_DB_PORT: 27017
+  #     DB_NAME: tasks
+  #     PORT: 80
+  #   ports:
+  #     - 9000:80
+  #   volumes:
+  #     - ./tools/wait-for-command.sh:/usr/local/bin/wait-for-command.sh
+  #   command: sh -c "wait-for-command.sh -c 'nc -z mongo 27017' && npm run prod"
+  #   depends_on:
+  #     - mongo
+  #   networks:
+  #     - server
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    volumes:
+      - ./data/mongodb:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - server
+
+networks:
+  server:
+    driver: bridge
