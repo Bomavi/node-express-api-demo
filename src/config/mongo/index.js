@@ -12,6 +12,7 @@ const DB_NAME = process.env.DB_NAME;
 const connectionUrl = `${MONGO_DB_HOST}:${MONGO_DB_PORT}/${DB_NAME}`;
 const options = {
 	useNewUrlParser: true,
+	useCreateIndex: true,
 };
 
 const mongoConnect = () => {
