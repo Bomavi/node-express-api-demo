@@ -24,7 +24,8 @@ const schema = new Schema(
 );
 
 schema.query.search = function(value) {
-	return this.where({ description: new RegExp(value, 'i') });
+	const val = value.toLowerCase();
+	return this.where({ description: new RegExp(val, 'i') });
 };
 
 module.exports = { schema };

@@ -24,8 +24,9 @@ const schema = new Schema(
 );
 
 schema.query.search = function(value) {
+	const val = value.toLowerCase();
 	return this.where({
-		$or: [{ firstname: new RegExp(value, 'i'), lastname: new RegExp(value, 'i') }],
+		$or: [{ firstname: new RegExp(val, 'i'), lastname: new RegExp(val, 'i') }],
 	});
 };
 
