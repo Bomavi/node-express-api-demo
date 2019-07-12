@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 
+global.rootRequire = name => require(`${__dirname}/${name}`);
+
 const { debugLogger } = require('./utils');
 const { api } = require('./routes');
 const { mongoConnect } = require('./config');

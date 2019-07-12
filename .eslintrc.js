@@ -15,6 +15,9 @@ module.exports = {
 		'eslint:recommended',
 		'plugin:prettier/recommended',
 	],
+	globals: {
+		rootRequire: false
+	},
 	rules: {
 		// eslint
 		'no-console': ['warn', { allow: ['warn', 'error'] }],
