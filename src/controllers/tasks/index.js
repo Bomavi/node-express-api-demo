@@ -1,6 +1,6 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
+// const mongoose = require('mongoose');
+// const ObjectId = mongoose.Types.ObjectId;
 
 const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 	const { q = '' } = req.query;
@@ -28,7 +28,7 @@ const create = ({ Task }) => async (req, res, next) => {
 	try {
 		const { description } = req.body;
 		const task = await Task.create({
-			_id: ObjectId(),
+			// _id: ObjectId(),
 			description,
 		});
 		res.status(200).send({ task });
