@@ -1,7 +1,7 @@
 const { connect, connection } = require('mongoose');
 const dotenv = require('dotenv');
 
-const { debugLogger } = require('../../utils');
+const { debugLogger } = rootRequire('utils');
 
 dotenv.config();
 

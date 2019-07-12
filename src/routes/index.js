@@ -1,8 +1,8 @@
 const express = require('express');
 
-const { errorHandler } = require('../middleware');
-const { User, Task } = require('../models');
-const { UsersController, TasksController } = require('../controllers');
+const { errorHandler } = rootRequire('middleware');
+const { User, Task } = rootRequire('models');
+const { UsersController, TasksController } = rootRequire('controllers');
 
 const models = { User, Task };
 
