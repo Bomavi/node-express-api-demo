@@ -1,4 +1,4 @@
 module.exports = {
-	User: require('./user'),
-	Task: require('./task'),
+	User: require('./User'),
+	Task: require('./Task'),
 };
