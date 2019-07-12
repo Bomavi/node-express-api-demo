@@ -23,8 +23,8 @@ const schema = new Schema(
 	}
 );
 
-schema.index({
-	description: 'text',
-});
+schema.query.search = function(value) {
+	return this.where({ description: new RegExp(value, 'i') });
+};
 
 module.exports = { schema };

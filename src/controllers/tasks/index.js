@@ -1,12 +1,12 @@
 const express = require('express');
-// const mongoose = require('mongoose');
-// const ObjectId = mongoose.Types.ObjectId;
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 	const { q = '' } = req.query;
 
 	try {
-		const tasks = await Task.find({ $text: { $search: q } });
+		const tasks = await Task.find().search(q);
 		res.status(200).send({ tasks });
 	} catch (e) {
 		next(e);
@@ -28,7 +28,7 @@ const create = ({ Task }) => async (req, res, next) => {
 	try {
 		const { description } = req.body;
 		const task = await Task.create({
-			// _id: ObjectId(),
+			_id: ObjectId(),
 			description,
 		});
 		res.status(200).send({ task });

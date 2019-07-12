@@ -23,9 +23,10 @@ const schema = new Schema(
 	}
 );
 
-schema.index({
-	firstname: 'text',
-	lastname: 'text',
-});
+schema.query.search = function(value) {
+	return this.where({
+		$or: [{ firstname: new RegExp(value, 'i'), lastname: new RegExp(value, 'i') }],
+	});
+};
 
 module.exports = { schema };
