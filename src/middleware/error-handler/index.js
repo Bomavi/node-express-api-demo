@@ -1,11 +1,13 @@
 const { APIError, InternalServerError } = require('rest-api-errors');
 const { STATUS_CODES } = require('http');
 
+const { debugLogger } = rootRequire('utils');
+
 const errorHandler = (err, _req, res, _next) => {
 	const error = err.status === 401 || err instanceof APIError ? err : new InternalServerError();
 
 	if (process.env.NODE_ENV !== 'production') {
-		// do something here
+		debugLogger('error', 'API error: %O', err);
 	}
 
 	if (['ValidationError', 'UserExistsError'].includes(err.name)) {
@@ -14,7 +16,7 @@ const errorHandler = (err, _req, res, _next) => {
 	}
 
 	// log error if needed
-	// logger.info('API error', { error: err });
+	// debugLogger('error', 'API error: %O', err);
 
 	return res // return 500 for user
 		.status(error.status || 500)
