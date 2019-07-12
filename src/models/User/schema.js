@@ -24,8 +24,8 @@ const schema = new Schema(
 );
 
 schema.index({
-	firstname: 'searchable',
-	lastname: 'searchable',
+	firstname: 'text',
+	lastname: 'text',
 });
 
 module.exports = { schema };

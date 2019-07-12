@@ -1,12 +1,12 @@
 const express = require('express');
-// const mongoose = require('mongoose');
-// const ObjectId = mongoose.Types.ObjectId;
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const searchOrGetAll = ({ User }) => async (req, res, next) => {
 	const { q = '' } = req.query;
 
 	try {
-		const users = await User.find({ $searchable: { $search: q } });
+		const users = await User.find({ $text: { $search: q } });
 		res.status(200).send({ users });
 	} catch (e) {
 		next(e);
@@ -28,7 +28,7 @@ const create = ({ User }) => async (req, res, next) => {
 	try {
 		const { firstname, lastname } = req.body;
 		const user = await User.create({
-			// _id: ObjectId(),
+			_id: ObjectId(),
 			firstname,
 			lastname,
 		});
