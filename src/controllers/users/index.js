@@ -67,7 +67,7 @@ module.exports = models => {
 	router.post('/', create(models));
 	router.get('/', searchOrGetAll(models));
 	router.get('/:_id', getById(models));
-	router.put('/:_id', updateById(models));
+	router.patch('/:_id', updateById(models));
 	router.delete('/:_id', deleteById(models));
 
 	return router;
