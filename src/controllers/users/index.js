@@ -1,6 +1,6 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
+// const mongoose = require('mongoose');
+// const ObjectId = mongoose.Types.ObjectId;
 
 const searchOrGetAll = ({ User }) => async (req, res, next) => {
 	const { q = '' } = req.query;
@@ -28,7 +28,7 @@ const create = ({ User }) => async (req, res, next) => {
 	try {
 		const { firstname, lastname } = req.body;
 		const user = await User.create({
-			_id: ObjectId(),
+			// _id: ObjectId(),
 			firstname,
 			lastname,
 		});
