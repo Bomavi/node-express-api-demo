@@ -35,6 +35,34 @@ services:
   #   networks:
   #     - server
 
+  # auth_service:
+  #   container_name: auth
+  #   build: ./../node-redis-auth-demo
+  #   restart: always
+  #   environment:
+  #     NODE_ENV: production
+  #     REDIS_HOST: redis
+  #     REDIS_PORT: 6379
+  #     PORT: 80
+  #   ports:
+  #     - 4000:80
+  #   volumes:
+  #     - ./tools/wait-for-command.sh:/usr/local/bin/wait-for-command.sh
+  #   command: sh -c "wait-for-command.sh -c 'nc -z redis 6379' && npm run prod"
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - server
+
+  # redis:
+  #   image: redis:alpine
+  #   container_name: redis
+  #   restart: always
+  #   ports:
+  #     - 6379:6379
+  #   networks:
+  #     - server
+
   mongo:
     image: mongo
     container_name: mongo
