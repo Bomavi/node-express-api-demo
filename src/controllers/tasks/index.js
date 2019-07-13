@@ -2,8 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
+const { debugLogger } = rootRequire('utils');
+
 const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 	const { q = '' } = req.query;
+	debugLogger('debug', 'Session: %o', req.session.cookie);
 
 	try {
 		const tasks = await Task.find().search(q);
