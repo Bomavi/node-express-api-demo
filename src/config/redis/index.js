@@ -12,6 +12,10 @@ const redisOptions = {
 	client: redisClient,
 };
 
+redisClient.on('ready', () => {
+	debugLogger('redis', 'Connection is READY!');
+});
+
 redisClient.on('error', err => {
 	debugLogger('redis', 'Error: %O', err);
 });
