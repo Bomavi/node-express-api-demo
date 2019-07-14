@@ -10,7 +10,7 @@ const validateUser = ({ User }) => async (req, res, next) => {
 			return next(createError(404, `user "${username}" not found!`));
 		}
 
-		res.status(200).send(user._id);
+		res.status(200).send({ userId: user._id });
 	} catch (e) {
 		next(e);
 	}
