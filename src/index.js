@@ -1,5 +1,7 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+// const cors = require('cors');
 
 /* Declare global rootRequire for "absolute" paths */
 global.rootRequire = name => require(`${__dirname}/${name}`);
@@ -19,12 +21,20 @@ const PORT = isProd ? process.env.PORT : process.env.DEV_PORT;
 const maxAge = process.env.SESSION_EXPIRES_IN * 1000 || 3600 * 1000;
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+/* Use CORS in non production env */
+// if (!isProd) {
+// 	app.options('*', cors({ credentials: true }));
+// 	app.use(cors({ credentials: true }));
+// }
+
 /* Initialize MONGO configuration */
 mongoConnect();
 
 /* Initialize express-session with REDIS */
-if (isProd) app.set('trust proxy', 1);
-
+app.set('trust proxy', 1);
 app.use(
 	session({
 		store: new redisStore(redisOptions),
