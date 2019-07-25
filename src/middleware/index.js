@@ -1,4 +1,5 @@
 module.exports = {
 	errorHandler: require('./error-handler'),
-	authenticate: require('./authenticate'),
+	isAuthenticated: require('./isAuthenticated'),
+	isMicroservice: require('./isMicroservice'),
 };
