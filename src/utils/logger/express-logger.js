@@ -8,4 +8,4 @@ const expressLogger = pino({
 	},
 });
 
-module.exports = { expressLogger };
+module.exports = expressLogger;
