@@ -49,8 +49,12 @@ const updateById = ({ User }) => async (req, res, next) => {
 	const { _id } = req.params;
 
 	try {
-		const { firstname, lastname } = req.body;
-		const user = await User.findByIdAndUpdate(_id, { firstname, lastname }).onlySafeFields();
+		const { firstname, lastname, theme } = req.body;
+		const user = await User.findOneAndUpdate(
+			{ _id },
+			{ firstname, lastname, theme },
+			{ new: true }
+		).onlySafeFields();
 		res.status(200).send(user);
 	} catch (e) {
 		next(e);
@@ -61,21 +65,8 @@ const deleteById = ({ User }) => async (req, res, next) => {
 	const { _id } = req.params;
 
 	try {
-		const user = await User.findByIdAndDelete(_id).onlySafeFields();
+		const user = await User.deleteOne({ _id }).onlySafeFields();
 		res.status(200).send(user._id);
-	} catch (e) {
-		next(e);
-	}
-};
-
-const authenticate = ({ User }) => async (req, res, next) => {
-	const { _id } = req.params;
-	debugLogger('http', 'PARAMS ID: %o', _id);
-
-	try {
-		const user = await User.findById(_id).onlySafeFields();
-
-		res.status(200).send(user);
 	} catch (e) {
 		next(e);
 	}
@@ -85,7 +76,6 @@ module.exports = models => {
 	const router = express();
 
 	router.get('/', searchOrGetAll(models));
-	router.get('/authenticate/:_id', authenticate(models));
 	router.get('/:_id', getById(models));
 	router.post('/', create(models));
 	router.put('/:_id', updateById(models));
