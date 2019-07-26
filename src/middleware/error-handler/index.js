@@ -7,7 +7,7 @@ const errorHandler = (err, _req, res, _next) => {
 		err instanceof createError.HttpError ? err : createError(500, 'InternalServerError');
 
 	if (process.env.NODE_ENV !== 'production') {
-		debugLogger('error', `${err.status}: ${err.message}`);
+		debugLogger('error', `${error.statusCode || error.status} %O`, err.message);
 	}
 
 	if (['ValidationError', 'UserExistsError'].includes(err.name)) {
