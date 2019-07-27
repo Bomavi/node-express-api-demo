@@ -1,16 +1,14 @@
 const createError = require('http-errors');
 
-const { jwt, debugLogger } = rootRequire('utils');
+const { jwt } = rootRequire('utils');
 
 const isAuthenticated = async (req, res, next) => {
 	let token = '';
 
 	if (req.session.accessToken) {
 		token = req.session.accessToken;
-		debugLogger('debug', 'Session TOKEN: %o', token);
 	} else {
 		const accessToken = req.headers['authorization'];
-		debugLogger('debug', 'HTTP TOKEN: %o', accessToken);
 
 		if (!accessToken) return next(createError(401, 'no accessToken provided!'));
 
