@@ -8,10 +8,10 @@ const { jwt } = rootRequire('utils');
 const ObjectId = mongoose.Types.ObjectId;
 
 const login = ({ User }) => async (req, res, next) => {
-	const { username = '', password = '', isGuest = false } = req.body;
-	let user;
-
 	try {
+		const { username = '', password = '', isGuest = false } = req.body;
+		let user;
+
 		const credentials = {
 			username: isGuest ? process.env.GUEST_USERNAME : username,
 			password: isGuest ? process.env.GUEST_PASSWORD : password,
@@ -53,9 +53,9 @@ const login = ({ User }) => async (req, res, next) => {
 };
 
 const register = ({ User }) => async (req, res, next) => {
-	const { username, password } = req.body;
-
 	try {
+		const { username, password } = req.body;
+
 		if (!username) throw Error(createError(404, `username is required`));
 		if (!password) throw Error(createError(404, `password is required`));
 
@@ -91,9 +91,9 @@ const logout = () => async (req, res, next) => {
 };
 
 const authenticate = ({ User }) => async (req, res, next) => {
-	const { accessToken } = req.session;
-
 	try {
+		const { accessToken } = req.session;
+
 		if (!accessToken) throw Error(createError(401, 'user not authenticated'));
 
 		const { userId } = await jwt.validate(accessToken);
