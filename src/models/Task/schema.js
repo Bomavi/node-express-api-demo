@@ -28,4 +28,8 @@ schema.query.search = function(value) {
 	return this.where({ description: new RegExp(val, 'i') });
 };
 
+schema.query.onlySafeFields = function() {
+	return this.select('-createdBy -__v');
+};
+
 module.exports = { schema };
