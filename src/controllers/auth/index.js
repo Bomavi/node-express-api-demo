@@ -20,9 +20,8 @@ const login = ({ User }) => async (req, res, next) => {
 			password: isGuest ? process.env.GUEST_PASSWORD : password,
 		};
 
-		if (!credentials.username) {
-			throw Error(createError(404, `username is required`));
-		}
+		if (!credentials.username) throw createError(404, `username is required`);
+		if (!credentials.password) throw createError(404, `password is required`);
 
 		const foundUser = await User.findOne({ username: credentials.username });
 
@@ -30,7 +29,7 @@ const login = ({ User }) => async (req, res, next) => {
 			const isPasswordEqual = await bcrypt.compare(credentials.password, foundUser.password);
 
 			if (!isPasswordEqual) {
-				throw Error(createError(401, `credentials for "${credentials.username}" invalid`));
+				throw createError(401, `credentials for "${credentials.username}" invalid`);
 			}
 		}
 
@@ -39,7 +38,7 @@ const login = ({ User }) => async (req, res, next) => {
 		if (!foundUser && credentials.username === 'guest') {
 			const hash = await bcrypt.hash(credentials.password, BCRYPT_SALT);
 
-			if (!hash) throw Error(createError(500, 'bcrypt failed'));
+			if (!hash) throw createError(500, 'bcrypt failed');
 
 			const newUser = await User.create({
 				_id: ObjectId(),
@@ -50,9 +49,7 @@ const login = ({ User }) => async (req, res, next) => {
 			if (newUser) user = newUser;
 		}
 
-		if (!user) {
-			throw Error(createError(404, `user not found or credentials invalid`));
-		}
+		if (!user) throw createError(401, `user not found or credentials invalid`);
 
 		const token = await jwt.issue({ userId: user._id });
 
@@ -67,16 +64,16 @@ const register = ({ User }) => async (req, res, next) => {
 	try {
 		const { username, password } = req.body;
 
-		if (!username) throw Error(createError(404, `username is required`));
-		if (!password) throw Error(createError(404, `password is required`));
+		if (!username) throw createError(404, `username is required`);
+		if (!password) throw createError(404, `password is required`);
 
 		const foundUser = await User.findOne({ username });
 
-		if (foundUser) throw Error(createError(401, `user "${username}" already exists`));
+		if (foundUser) throw createError(405, `user "${username}" already exists`);
 
 		const hash = await bcrypt.hash(password, BCRYPT_SALT);
 
-		if (!hash) throw Error(createError(500, 'bcrypt failed'));
+		if (!hash) throw createError(500, 'bcrypt failed');
 
 		const user = await User.create({
 			_id: ObjectId(),
@@ -109,7 +106,7 @@ const authenticate = ({ User }) => async (req, res, next) => {
 	try {
 		const { accessToken } = req.session;
 
-		if (!accessToken) throw Error(createError(401, 'user not authenticated'));
+		if (!accessToken) throw createError(401, 'user not authenticated');
 
 		const { userId } = await jwt.validate(accessToken);
 		const user = await User.findById(userId).onlySafeFields();
