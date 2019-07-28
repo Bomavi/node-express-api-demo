@@ -1,11 +1,13 @@
 const express = require('express');
 const createError = require('http-errors');
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 /* root imports: common */
 const { jwt } = rootRequire('utils');
 
 const ObjectId = mongoose.Types.ObjectId;
+const BCRYPT_SALT = Number(process.env.BCRYPT_SALT) || 10;
 
 const login = ({ User }) => async (req, res, next) => {
 	try {
@@ -23,17 +25,25 @@ const login = ({ User }) => async (req, res, next) => {
 
 		const foundUser = await User.findOne({ username: credentials.username });
 
-		if (foundUser && foundUser.password !== credentials.password) {
-			throw Error(createError(401, `credentials for "${credentials.username}" invalid`));
+		if (foundUser) {
+			const isPasswordEqual = await bcrypt.compare(credentials.password, foundUser.password);
+
+			if (!isPasswordEqual) {
+				throw Error(createError(401, `credentials for "${credentials.username}" invalid`));
+			}
 		}
 
 		if (foundUser) user = foundUser;
 
 		if (!foundUser && credentials.username === 'guest') {
+			const hash = await bcrypt.hash(credentials.password, BCRYPT_SALT);
+
+			if (!hash) throw Error(createError(500, 'bcrypt failed'));
+
 			const newUser = await User.create({
 				_id: ObjectId(),
 				username: credentials.username,
-				password: credentials.username,
+				password: hash,
 			});
 
 			if (newUser) user = newUser;
@@ -63,10 +73,14 @@ const register = ({ User }) => async (req, res, next) => {
 
 		if (foundUser) throw Error(createError(401, `user "${username}" already exists`));
 
+		const hash = await bcrypt.hash(password, BCRYPT_SALT);
+
+		if (!hash) throw Error(createError(500, 'bcrypt failed'));
+
 		const user = await User.create({
 			_id: ObjectId(),
 			username,
-			password,
+			password: hash,
 		});
 
 		const token = await jwt.issue({ userId: user._id });
