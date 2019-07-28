@@ -109,7 +109,7 @@ const authenticate = ({ User }) => async (req, res, next) => {
 		if (!accessToken) throw createError(401, 'user not authenticated');
 
 		const { userId } = await jwt.validate(accessToken);
-		const user = await User.findById(userId).onlySafeFields();
+		const user = await User.findById(userId).getPublic();
 
 		res.status(200).send(user);
 	} catch (e) {

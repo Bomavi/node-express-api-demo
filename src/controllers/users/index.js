@@ -6,8 +6,7 @@ const searchOrGetAll = ({ User }) => async (req, res, next) => {
 		const { q = '' } = req.query;
 		const users = await User.find()
 			.search(q)
-			.onlySafeFields();
-
+			.getPublic();
 		res.status(200).send(users);
 	} catch (e) {
 		next(e);
@@ -17,7 +16,7 @@ const searchOrGetAll = ({ User }) => async (req, res, next) => {
 const getById = ({ User }) => async (req, res, next) => {
 	try {
 		const { _id } = req.params;
-		const user = await User.findById(_id).onlySafeFields();
+		const user = await User.findById(_id).getPublic();
 		res.status(200).send(user);
 	} catch (e) {
 		next(e);
@@ -32,7 +31,7 @@ const updateById = ({ User }) => async (req, res, next) => {
 			_id,
 			{ firstname, lastname, theme },
 			{ new: true }
-		).onlySafeFields();
+		).getPublic();
 		res.status(200).send(user);
 	} catch (e) {
 		next(e);

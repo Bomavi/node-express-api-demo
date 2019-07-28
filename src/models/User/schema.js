@@ -26,11 +26,11 @@ const schema = new Schema(
 schema.query.search = function(value) {
 	const val = value.toLowerCase();
 	return this.where({
-		$or: [{ firstname: new RegExp(val, 'i'), lastname: new RegExp(val, 'i') }],
+		username: new RegExp(val, 'i'),
 	});
 };
 
-schema.query.onlySafeFields = function() {
+schema.query.getPublic = function() {
 	return this.select('-password -role -__v');
 };
 

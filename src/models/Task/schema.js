@@ -30,7 +30,13 @@ schema.query.search = function(value) {
 	return this.where({ description: new RegExp(val, 'i') });
 };
 
-schema.query.onlySafeFields = function() {
+schema.query.createdBy = function(userId) {
+	return this.where({
+		createdBy: userId,
+	});
+};
+
+schema.query.getPublic = function() {
 	return this.select('-createdBy -__v');
 };
 

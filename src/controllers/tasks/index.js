@@ -9,10 +9,13 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 	try {
+		const { accessToken } = req.session;
+		const { userId } = await jwt.validate(accessToken);
 		const { q = '' } = req.query;
 		const tasks = await Task.find()
 			.search(q)
-			.onlySafeFields();
+			.createdBy(userId)
+			.getPublic();
 		res.status(200).send(tasks);
 	} catch (e) {
 		next(e);
@@ -21,8 +24,12 @@ const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 
 const getById = ({ Task }) => async (req, res, next) => {
 	try {
+		const { accessToken } = req.session;
+		const { userId } = await jwt.validate(accessToken);
 		const { _id } = req.params;
-		const task = await Task.findById(_id).onlySafeFields();
+		const task = await Task.findById(_id)
+			.createdBy(userId)
+			.getPublic();
 		res.status(200).send(task);
 	} catch (e) {
 		next(e);
@@ -42,7 +49,7 @@ const create = ({ Task }) => async (req, res, next) => {
 		});
 		newTask.save(async err => {
 			if (err) throw Error(err);
-			const task = await Task.findById(newTask._id).onlySafeFields();
+			const task = await Task.findById(newTask._id).getPublic();
 			res.status(200).send(task);
 		});
 	} catch (e) {
@@ -58,7 +65,7 @@ const updateById = ({ Task }) => async (req, res, next) => {
 			_id,
 			{ description, completed },
 			{ new: true }
-		).onlySafeFields();
+		).getPublic();
 		res.status(200).send(task);
 	} catch (e) {
 		next(e);
