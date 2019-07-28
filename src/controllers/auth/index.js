@@ -54,6 +54,7 @@ const login = ({ User }) => async (req, res, next) => {
 		const token = await jwt.issue({ userId: user._id });
 
 		req.session.accessToken = token;
+		req.session.userId = user._id;
 		res.status(200).send(user);
 	} catch (e) {
 		next(e);
@@ -84,6 +85,7 @@ const register = ({ User }) => async (req, res, next) => {
 		const token = await jwt.issue({ userId: user._id });
 
 		req.session.accessToken = token;
+		req.session.userId = user._id;
 		res.status(200).send(user);
 	} catch (e) {
 		next(e);

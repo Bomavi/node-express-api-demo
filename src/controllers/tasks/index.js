@@ -2,15 +2,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-/* root imports: common */
-const { jwt } = rootRequire('utils');
-
 const ObjectId = mongoose.Types.ObjectId;
 
 const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 	try {
-		const { accessToken } = req.session;
-		const { userId } = await jwt.validate(accessToken);
+		const { userId } = req.session;
 		const { q = '' } = req.query;
 		const tasks = await Task.find()
 			.search(q)
@@ -24,8 +20,7 @@ const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 
 const getById = ({ Task }) => async (req, res, next) => {
 	try {
-		const { accessToken } = req.session;
-		const { userId } = await jwt.validate(accessToken);
+		const { userId } = req.session;
 		const { _id } = req.params;
 		const task = await Task.findById(_id)
 			.createdBy(userId)
@@ -38,8 +33,7 @@ const getById = ({ Task }) => async (req, res, next) => {
 
 const create = ({ Task }) => async (req, res, next) => {
 	try {
-		const { accessToken } = req.session;
-		const { userId } = await jwt.validate(accessToken);
+		const { userId } = req.session;
 		const { description, completed } = req.body;
 		const newTask = await new Task({
 			_id: ObjectId(),
