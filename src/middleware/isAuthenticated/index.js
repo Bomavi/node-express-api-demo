@@ -1,5 +1,7 @@
+/* npm imports: common */
 const createError = require('http-errors');
 
+/* root imports: common */
 const { jwt } = rootRequire('utils');
 
 const isAuthenticated = async (req, res, next) => {

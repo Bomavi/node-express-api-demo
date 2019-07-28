@@ -1,13 +1,15 @@
+/* npm imports: common */
 const createError = require('http-errors');
 
-const { debugLogger } = rootRequire('utils');
+/* root imports: common */
+const { logger } = rootRequire('utils');
 
 const errorHandler = (err, _req, res, _next) => {
 	const error =
 		err instanceof createError.HttpError ? err : createError(500, 'InternalServerError');
 
 	if (process.env.NODE_ENV !== 'production') {
-		debugLogger('error', `${error.statusCode || error.status} %O`, err.message);
+		logger.error(`${error.statusCode || error.status} %O`, err.message);
 	}
 
 	if (['ValidationError', 'UserExistsError'].includes(err.name)) {

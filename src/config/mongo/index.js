@@ -1,6 +1,8 @@
+/* npm imports: common */
 const { connect, connection } = require('mongoose');
 
-const { debugLogger } = rootRequire('utils');
+/* root imports: common */
+const { logger } = rootRequire('utils');
 
 const MONGO_DB_HOST = process.env.MONGO_DB_HOST || process.env.MONGO_DB_DEV_HOST;
 const MONGO_DB_PORT = process.env.MONGO_DB_PORT || process.env.MONGO_DB_DEV_PORT;
@@ -19,15 +21,15 @@ const mongoConnect = () => {
 	);
 
 	connection.on('connected', () => {
-		debugLogger('mongo', `Mongoose connection is open to: ${connectionUrl}`);
+		logger.mongo(`Mongoose connection is open to: ${connectionUrl}`);
 	});
 
 	connection.on('error', e => {
-		debugLogger('mongo', `Mongoose connection has occured ${e} error`);
+		logger.mongo(`Mongoose connection has occured ${e} error`);
 	});
 
 	connection.on('disconnected', () => {
-		debugLogger('mongo', 'Mongoose connection was disconnected!');
+		logger.mongo('Mongoose connection was disconnected!');
 	});
 
 	process.on('SIGINT', () => {

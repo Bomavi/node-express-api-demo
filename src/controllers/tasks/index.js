@@ -1,9 +1,11 @@
+/* npm imports: common */
 const express = require('express');
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
 
 /* root imports: common */
 const { jwt } = rootRequire('utils');
+
+const ObjectId = mongoose.Types.ObjectId;
 
 const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 	try {
@@ -83,7 +85,6 @@ module.exports = models => {
 	router.post('/', create(models));
 
 	router.put('/:_id', updateById(models));
-
 	router.delete('/:_id', deleteById(models));
 
 	return router;

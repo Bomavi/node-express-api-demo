@@ -1,9 +1,9 @@
+/* npm imports: common */
 const express = require('express');
 
+/* root imports: common */
 const { isAuthenticated, errorHandler } = rootRequire('middleware');
 const { User, Task } = rootRequire('models');
-
-// TODO!!! FIX SHIT BELOW
 const { AuthController, UsersController, TasksController } = rootRequire('controllers');
 
 const models = { User, Task };

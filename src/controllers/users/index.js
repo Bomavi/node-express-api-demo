@@ -1,15 +1,9 @@
+/* npm imports: common */
 const express = require('express');
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
-
-const { debugLogger } = rootRequire('utils');
 
 const searchOrGetAll = ({ User }) => async (req, res, next) => {
-	const { q = '' } = req.query;
-
-	debugLogger('debug', `Session is: %o`, req.session);
-
 	try {
+		const { q = '' } = req.query;
 		const users = await User.find()
 			.search(q)
 			.onlySafeFields();
@@ -21,9 +15,8 @@ const searchOrGetAll = ({ User }) => async (req, res, next) => {
 };
 
 const getById = ({ User }) => async (req, res, next) => {
-	const { _id } = req.params;
-
 	try {
+		const { _id } = req.params;
 		const user = await User.findById(_id).onlySafeFields();
 		res.status(200).send(user);
 	} catch (e) {
@@ -31,27 +24,12 @@ const getById = ({ User }) => async (req, res, next) => {
 	}
 };
 
-const create = ({ User }) => async (req, res, next) => {
-	try {
-		const { firstname, lastname } = req.body;
-		const user = await User.create({
-			_id: ObjectId(),
-			firstname,
-			lastname,
-		});
-		res.status(200).send(user);
-	} catch (e) {
-		next(e);
-	}
-};
-
 const updateById = ({ User }) => async (req, res, next) => {
-	const { _id } = req.params;
-
 	try {
+		const { _id } = req.params;
 		const { firstname, lastname, theme } = req.body;
-		const user = await User.findOneAndUpdate(
-			{ _id },
+		const user = await User.findByIdAndUpdate(
+			_id,
 			{ firstname, lastname, theme },
 			{ new: true }
 		).onlySafeFields();
@@ -62,10 +40,9 @@ const updateById = ({ User }) => async (req, res, next) => {
 };
 
 const deleteById = ({ User }) => async (req, res, next) => {
-	const { _id } = req.params;
-
 	try {
-		const user = await User.deleteOne({ _id }).onlySafeFields();
+		const { _id } = req.params;
+		const user = await User.findByIdAndDelete(_id);
 		res.status(200).send(user._id);
 	} catch (e) {
 		next(e);
@@ -76,8 +53,9 @@ module.exports = models => {
 	const router = express();
 
 	router.get('/', searchOrGetAll(models));
+	router.get('/search', searchOrGetAll(models));
 	router.get('/:_id', getById(models));
-	router.post('/', create(models));
+
 	router.put('/:_id', updateById(models));
 	router.delete('/:_id', deleteById(models));
 

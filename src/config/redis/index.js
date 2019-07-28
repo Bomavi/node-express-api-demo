@@ -1,8 +1,10 @@
+/* npm imports: common */
 const session = require('express-session');
 const redis = require('redis');
 const redisStore = require('connect-redis')(session);
 
-const { debugLogger } = rootRequire('utils');
+/* root imports: common */
+const { logger } = rootRequire('utils');
 
 const redisClientOptions = {
 	host: process.env.REDIS_HOST || '127.0.0.1',
@@ -16,11 +18,13 @@ const redisOptions = {
 };
 
 redisClient.on('ready', () => {
-	debugLogger('redis', 'Connection is READY!');
+	logger.redis(
+		`Redis connection is open to: ${redisClientOptions.host}:${redisClientOptions.port}`
+	);
 });
 
 redisClient.on('error', err => {
-	debugLogger('redis', 'Error: %O', err);
+	logger.redis('Redis connection has occured error: %O', err);
 });
 
 module.exports = {

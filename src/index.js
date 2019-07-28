@@ -1,11 +1,13 @@
+/* npm imports: common */
 const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 
-/* Declare global rootRequire for "absolute" paths */
+/* Declare global rootRequire for root imports */
 global.rootRequire = name => require(`${__dirname}/${name}`);
 
-const { debugLogger } = rootRequire('utils');
+/* root imports: common */
+const { logger } = rootRequire('utils');
 const { api } = rootRequire('routes');
 const {
 	service,
@@ -16,7 +18,7 @@ const {
 /* Get .env constants */
 dotenv.config();
 
-/* initialize microservice with credentials */
+/* Initialize microservice with credentials */
 service.init();
 
 // const isProd = process.env.NODE_ENV === 'production';
@@ -35,7 +37,7 @@ app.use(
 		resave: true,
 		rolling: false,
 		saveUninitialized: false,
-		// proxy: true,
+		proxy: true,
 		cookie: {
 			path: '/',
 			domain: 'localhost',
@@ -54,6 +56,7 @@ mongoConnect();
 /* Initialize app routes */
 app.use(`/services/${process.env.SERVICE_NAME}`, api());
 
+/* Start app */
 app.listen(PORT, () => {
-	debugLogger('app', `Server is running on port ${PORT}`);
+	logger.app(`Server is running on port ${PORT}`);
 });

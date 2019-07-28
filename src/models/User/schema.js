@@ -1,6 +1,7 @@
+/* npm imports: common */
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
-const ObjectId = Schema.Types.ObjectId;
 
 const schema = new Schema(
 	{
@@ -15,11 +16,6 @@ const schema = new Schema(
 		theme: {
 			type: String,
 			default: 'light',
-		},
-		role: {
-			type: ObjectId,
-			// required: true,
-			ref: 'Role',
 		},
 	},
 	{
