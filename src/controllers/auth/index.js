@@ -51,11 +51,12 @@ const login = ({ User }) => async (req, res, next) => {
 
 		if (!user) throw createError(401, `user not found or credentials invalid`);
 
-		const token = await jwt.issue({ userId: user._id });
+		const publicUserInfo = await User.findById(user._id).getPublic();
+		const token = await jwt.issue({ userId: publicUserInfo._id });
 
 		req.session.accessToken = token;
-		req.session.userId = user._id;
-		res.status(200).send(user);
+		req.session.userId = publicUserInfo._id;
+		res.status(200).send(publicUserInfo);
 	} catch (e) {
 		next(e);
 	}
@@ -82,11 +83,12 @@ const register = ({ User }) => async (req, res, next) => {
 			password: hash,
 		});
 
-		const token = await jwt.issue({ userId: user._id });
+		const publicUserInfo = await User.findById(user._id).getPublic();
+		const token = await jwt.issue({ userId: publicUserInfo._id });
 
 		req.session.accessToken = token;
-		req.session.userId = user._id;
-		res.status(200).send(user);
+		req.session.userId = publicUserInfo._id;
+		res.status(200).send(publicUserInfo);
 	} catch (e) {
 		next(e);
 	}
