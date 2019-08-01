@@ -11,6 +11,7 @@ const searchOrGetAll = ({ Task }) => async (req, res, next) => {
 		const tasks = await Task.find()
 			.search(q)
 			.createdBy(userId)
+			.sort('-createdAt')
 			.getPublic();
 		res.status(200).send(tasks);
 	} catch (e) {
