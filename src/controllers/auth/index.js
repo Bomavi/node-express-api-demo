@@ -26,10 +26,16 @@ const login = ({ User }) => async (req, res, next) => {
 		const foundUser = await User.findOne({ username: credentials.username });
 
 		if (foundUser) {
-			const isPasswordEqual = await bcrypt.compare(credentials.password, foundUser.password);
+			const isPasswordEqual = await bcrypt.compare(
+				credentials.password,
+				foundUser.password
+			);
 
 			if (!isPasswordEqual) {
-				throw createError(401, `credentials for "${credentials.username}" invalid`);
+				throw createError(
+					401,
+					`credentials for "${credentials.username}" invalid`
+				);
 			}
 		}
 

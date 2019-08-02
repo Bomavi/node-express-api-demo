@@ -33,5 +33,16 @@ module.exports = {
 		'spaced-comment': ['error', 'always'],
 		'no-unused-vars': ['error', { 'argsIgnorePattern': '^_', 'ignoreRestSiblings': true }],
 		'require-atomic-updates': 0,
+		// prettier
+		'prettier/prettier': [
+			'error',
+			{
+				useTabs: true,
+				tabWidth: 4,
+				semi: true,
+				singleQuote: true,
+				printWidth: 90,
+			},
+		],
 	},
 };

@@ -55,31 +55,30 @@ module.exports = class ApiClient {
 		});
 	}
 
-	async request({ url, method, params, body, options }) {
-		return axios({
-			method,
-			url,
-			params,
-			baseURL: this.prefix,
-			data: body,
-			options,
-		})
-			.then(response => {
-				return response.data;
-			})
-			.catch(error => {
-				const res = error.response;
-				if (!res) {
-					console.error(error);
-					throw new Error(error);
-				}
-				if (res.status >= 400) {
-					const serverError = new Error(error);
-
-					serverError.res = res;
-
-					throw serverError;
-				}
+	// async request({ url, method, params, body, options }) {
+	async request({ url, method, params, body }) {
+		try {
+			const response = await axios({
+				method,
+				url,
+				params,
+				baseURL: this.prefix,
+				data: body,
+				// ...options, // ! spread operator does not work
 			});
+			return response.data;
+		} catch (e) {
+			const response = e.response;
+			if (!response) {
+				console.error(e);
+				throw Error(e);
+			}
+			if (response.status >= 400) {
+				const serverError = e;
+				serverError.res = response;
+				throw serverError;
+			}
+			return e;
+		}
 	}
 };
