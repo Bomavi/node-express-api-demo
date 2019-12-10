@@ -15,10 +15,7 @@ const options = {
 };
 
 const mongoConnect = () => {
-	connect(
-		connectionUrl,
-		options
-	);
+	connect(connectionUrl, options);
 
 	connection.on('connected', () => {
 		logger.mongo(`Mongoose connection is open to: ${connectionUrl}`);
